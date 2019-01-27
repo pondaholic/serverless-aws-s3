@@ -29,23 +29,25 @@ functions:
     events:
       - http:
           path: create
-      - s3:
-          bucket: photos
-          event: s3:ObjectCreated:*
+          method: post
 
   getJSON:
-    handler: handler.get
+    handler: app.server
     description: return the document history records as an array along with a property that indicates the total number of history records as JSON to the browser, if file doesn’t exist then value would be zero
     events:
       - http:
-          path: query
-          method: get
+          path: /
+          method: ANY
+      - http:
+          path: /{proxy+}
+          method: ANY
 # resources:
 #   Resources:
 #     S3BucketPhotos:
 #       Type: AWS::S3::Bucket
 #       Properties:
 #         BucketName: custom-bucket
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

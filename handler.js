@@ -1,30 +1,14 @@
 'use strict';
-const AWS = require('aws-sdk');
+// const AWS = require('aws-sdk');
+const express = require('express');
+const sls = require('serverless-http');
+const app = express();
 
-let bucketName = 'node-serverless-bucket';
-const keyName = 'hello_world';
-const date = new Date().toTimeString();
-const bucketPromise = new AWS.S3({ apiVersion: 'v1-test' })
-	.createBucket({ bucket: bucketName })
-	.promise();
+app.get('/', async (req, res, next) => {
+	res.status(200).send('Hello World');
+});
 
-bucketPromise
-	.then(function(data) {
-		let objectParams = {
-			Bucket: bucketName,
-			Key: keyName,
-			Body: { history: date }
-		};
-		let uploadPromise = new AWS.S3({ apiVersion: 'v1-test' })
-			.putObject(objectParams)
-			.promise();
-		uploadPromise.then(function(data) {
-			console.log('Success' + bucketName + '/' + keyName);
-		});
-	})
-	.catch(function(err) {
-		console.error(err, err.stack);
-	});
+module.exports.server = sls(app);
 
 // exports.handler = (event, context, callback) => {
 // 	const number1 = event.Number1;
