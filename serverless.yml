@@ -23,16 +23,16 @@ provider:
   stage: dev
 
 functions:
-  postJSON:
-    handler: handler.submit
-    description: testing posting
-    events:
-      - http:
-          path: create
-          method: post
+  # postJSON:
+  #   handler: handler.submit
+  #   description: testing posting
+  #   events:
+  #     - http:
+  #         path: create
+  #         method: post
 
-  getJSON:
-    handler: app.server
+  app:
+    handler: handler.server
     description: return the document history records as an array along with a property that indicates the total number of history records as JSON to the browser, if file doesn’t exist then value would be zero
     events:
       - http:
