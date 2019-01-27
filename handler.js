@@ -1,40 +1,43 @@
 'use strict';
-// const AWS = require('aws-sdk');
-const express = require('express');
-const sls = require('serverless-http');
-const app = express();
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
+// const express = require('express');
+// const sls = require('serverless-http');
+// const app = express();
 
-app.get('/', async (req, res, next) => {
-	res.status(200).send('Hello World');
-});
-
-module.exports.server = sls(app);
-
-// exports.handler = (event, context, callback) => {
-// 	const number1 = event.Number1;
-// 	const number2 = event.Number2;
-// 	let sum = number1 + number2;
-// 	let product = number1 * number2;
-// 	let difference = Math.abs(number1 - number2);
-// 	let quotient = number1 / number2;
-// 	callback(null, {
-// 		Number1: number1,
-// 		Number2: number2,
-// 		Sum: sum,
-// 		Product: product,
-// 		Difference: difference,
-// 		Quotient: quotient
-// 	});
-// };
-
-// module.exports.submit = async (event, context, callback) => {
-// 	const response = {
-// 		statusCode: 200,
-// 		body: JSON.stringify({
-// 			message: `Current time ${new Date().toTimeString()}`,
-// 			input: { test: 'some value' }
+// app.post('/', async (req, res, next) => {
+// 	let date = new Date().toTimeString();
+// 	console.info(date);
+// 	s3.putObject(date)
+// 		.then(result => {
+// 			console.info(result);
+// 			res.status(201).json(result);
 // 		})
-// 	};
+// 		.catch(err => next(err));
+
+// 	// res.status(200).send('Hello World');
+// });
+
+// module.exports.server = sls(app);
+
+module.exports.request = async (event, context, callback) => {
+	return new Promise((resolve, reject) => {
+		const options = {
+			path: '/',
+			method: 'GET'
+		};
+
+		const req = http.request(options, res => {
+			resolve('Success');
+		});
+
+		req.on('error', e => {
+			reject(e.message);
+		});
+		req.write('');
+		req.end();
+	});
+};
 
 // 	callback(null, response);
 
