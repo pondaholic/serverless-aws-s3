@@ -1,0 +1,1 @@
+This is a text file uploaded to 'testing-posts' bucket in s3.

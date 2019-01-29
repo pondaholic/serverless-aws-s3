@@ -23,31 +23,24 @@ provider:
   stage: dev
 
 functions:
-  # postJSON:
-  #   handler: handler.submit
-  #   description: testing posting
-  #   events:
-  #     - http:
-  #         path: create
-  #         method: post
-
-  app:
-    handler: handler.server
-    description: return the document history records as an array along with a property that indicates the total number of history records as JSON to the browser, if file doesn’t exist then value would be zero
+  get:
+    handler: handler.get
+    description: testing s3.getObject
     events:
       - http:
-          path: /
-          method: ANY
+          path: '/get'
+          method: GET
+  post:
+    handler: handler.post
+    description: testing s3.putObject
+    events:
       - http:
-          path: /{proxy+}
-          method: ANY
-# resources:
+          path: '/post'
+          method: POST
+# resources: "/"
 #   Resources:
-#     S3BucketPhotos:
-#       Type: AWS::S3::Bucket
-#       Properties:
-#         BucketName: custom-bucket
-
+#     Properties:
+#       BucketName: 'testing-posts'
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

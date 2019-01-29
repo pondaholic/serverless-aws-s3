@@ -1,53 +1,43 @@
-'use strict';
 const AWS = require('aws-sdk');
-const s3 = new AWS.S3();
-// const express = require('express');
-// const sls = require('serverless-http');
-// const app = express();
+let s3 = new AWS.S3();
 
-// app.post('/', async (req, res, next) => {
-// 	let date = new Date().toTimeString();
-// 	console.info(date);
-// 	s3.putObject(date)
-// 		.then(result => {
-// 			console.info(result);
-// 			res.status(201).json(result);
-// 		})
-// 		.catch(err => next(err));
-
-// 	// res.status(200).send('Hello World');
-// });
-
-// module.exports.server = sls(app);
-
-module.exports.request = async (event, context, callback) => {
-	return new Promise((resolve, reject) => {
-		const options = {
-			path: '/',
-			method: 'GET'
-		};
-
-		const req = http.request(options, res => {
-			resolve('Success');
-		});
-
-		req.on('error', e => {
-			reject(e.message);
-		});
-		req.write('');
-		req.end();
+exports.get = (event, context, callback) => {
+	const params = {
+		Bucket: 'posting-tests',
+		Key: 'sample.json'
+	};
+	s3.getObject(params, function(err, data) {
+		if (err) {
+			console.log(err);
+			callback(err, null);
+		} else {
+			console.log(data);
+			let response = {
+				statusCode: 200,
+				headers: {
+					my_header: 'my_value'
+				},
+				body: JSON.stringify(data),
+				isBase64Encoded: false
+			};
+			callback(null, response);
+		}
 	});
 };
 
-// 	callback(null, response);
-
-// 	// Use this code if you don't use the http event with the LAMBDA-PROXY integration
-// 	// return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
-// };
-
-// module.exports.get = async (event, context, callback) => {
-// 	return {
-// 		statusCode: 200,
-// 		body: event.body
-// 	};
-// };
+exports.post = (event, context, callback) => {
+	const date = new Date().toDateString();
+	const params = {
+		Bucket: 'posting-tests',
+		Key: 'test-json.json',
+		Body: date
+	};
+	s3.putObject(params, function(err, data) {
+		if (err) {
+			console.log(err);
+			callback(err, null);
+		} else {
+			callback(null, data);
+		}
+	});
+};
